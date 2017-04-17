@@ -1,0 +1,2 @@
+# awsthumbnailgenerator
+AWS Thumbnail Generator
