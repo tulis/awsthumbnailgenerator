@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 
 using Amazon.Lambda.Core;
 using Amazon.Lambda.S3Events;
 using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.S3.Util;
+using ImageSharp;
+using ImageSharp.IO;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializerAttribute(typeof(Amazon.Lambda.Serialization.Json.JsonSerializer))]
@@ -53,8 +57,25 @@ namespace awsthumbnailgenerator
 
             try
             {
-                var response = await this.S3Client.GetObjectMetadataAsync(s3Event.Bucket.Name, s3Event.Object.Key);                
-                return response.Headers.ContentType;
+                using(var getObjectResponse = await this.S3Client.GetObjectAsync(s3Event.Bucket.Name, s3Event.Object.Key))
+                using(var responseStream = getObjectResponse.ResponseStream)                
+                using(var image = Image.Load(responseStream))
+                using(var stream = new MemoryStream())
+                {
+                    image.Resize(image.Width / 2, image.Height / 2)
+                        .Grayscale()
+                        .Save(stream);
+
+                    var putObjectRequest = new PutObjectRequest()
+                    {
+                        BucketName = "alice-bob"
+                        , Key = $"thumbnail/{s3Event.Object.Key}"
+                        , InputStream = stream                        
+                    };
+
+                    var putObjectResponse = await this.S3Client.PutObjectAsync(putObjectRequest);
+                    return putObjectResponse.ToString();
+                }
             }
             catch(Exception e)
             {
