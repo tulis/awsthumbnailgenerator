@@ -57,6 +57,7 @@ namespace awsthumbnailgenerator
 
             try
             {
+                context.Logger.LogLine($"Bucket Name = {s3Event.Bucket.Name}; Object Key = {s3Event.Object.Key}");
                 using(var getObjectResponse = await this.S3Client.GetObjectAsync(s3Event.Bucket.Name, s3Event.Object.Key))
                 using(var responseStream = getObjectResponse.ResponseStream)                
                 using(var image = Image.Load(responseStream))
