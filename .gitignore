@@ -2,10 +2,6 @@
 [Bb]in/
 [Oo]bj/
 src/Output/
-src/Adaptive.ReactiveTrader.Web/Client/**/*.js
-src/Adaptive.ReactiveTrader.Web/app.js
-src/Adaptive.ReactiveTrader.Web/IReactiveTrader.js
-src/Adaptive.ReactiveTrader.Web/ReactiveTrader.js
 
 # mstest test results
 TestResults
