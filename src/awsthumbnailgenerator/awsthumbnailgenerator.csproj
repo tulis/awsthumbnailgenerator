@@ -8,8 +8,8 @@
     <PackageReference Include="Amazon.Lambda.S3Events" Version="1.0.1" />
     <PackageReference Include="Amazon.Lambda.Tools" Version="1.4.0" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.5.10" />
-    <PackageReference Include="ImageSharp" Version="0.0.0" />
-  </ItemGroup>  
+    <PackageReference Include="ImageSharp" Version="1.0.0-alpha6-00049" />
+  </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Amazon.Lambda.Tools" Version="1.4.0" />
   </ItemGroup>
