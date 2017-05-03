@@ -60,12 +60,10 @@ namespace awsthumbnailgenerator
                 context.Logger.LogLine($"Bucket Name = {s3Event.Bucket.Name}; Object Key = {s3Event.Object.Key}");
                 using(var getObjectResponse = await this.S3Client.GetObjectAsync(s3Event.Bucket.Name, s3Event.Object.Key))
                 using(var responseStream = getObjectResponse.ResponseStream)                
-                using(var image = Image.Load(responseStream))
+                using(var image = Image.Load<Color>(responseStream))
                 using(var stream = new MemoryStream())
                 {
-                    image.Resize(image.Width / 2, image.Height / 2)
-                        .Grayscale()
-                        .Save(stream);
+                    image.Pad(width, height).AutoOrient();
 
                     var putObjectRequest = new PutObjectRequest()
                     {
